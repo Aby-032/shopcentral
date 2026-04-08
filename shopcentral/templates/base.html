@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+            ShopCentral
+        {% endblock %}
+    </title>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div>
+            <a href="/">ShopCentral</a>
+        </div>
+        <div>
+            <a href="/">Home</a>
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <h1>
+            {% block heading %}
+                Welcome!
+            {% endblock %}
+        </h1>
+
+        {% block content %}
+        {% endblock %}
+        
+    </div>
+</body>
+</html>
