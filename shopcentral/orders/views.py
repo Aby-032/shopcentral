@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Cart, CartItem
+from .models import Cart, CartItem, Order, OrderItem
 from products.models import Product
 
 # Create your views here.
@@ -38,3 +38,33 @@ def cart_view(request):
         "cart_items": cart_items,
         "total": total
     })
+
+@login_required # Checkout
+def checkout(request):
+    if request.method == "POST":
+        cart = Cart.objects.get(user=request.user)
+        cart_items = cart.items.all()
+
+        if not cart_items.exists():
+            return redirect('cart')
+
+        total = sum(item.subtotal for item in cart_items)
+        order = Order.objects.create(
+            user = request.user,
+            total_price = total,
+            status = "PENDING"
+        )
+
+        for item in cart_items:
+            OrderItem.objects.create(
+                order = order,
+                product = item.product,
+                quantity = item.quantity,
+                price = item.product.price
+            )
+
+        cart_items.delete()
+
+        return redirect('cart')
+    
+    return redirect('cart')
