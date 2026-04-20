@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 
@@ -24,13 +25,18 @@ def user_login(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect("home")
+            return render(request, 'base.html')
     else:
         form = AuthenticationForm()
 
     return render(request, "users/login.html", {"form": form})
 
+# Temp Home
+def home_view(request):
+    return HttpResponse("Temperory Home Page")
+
 # Logout view
 def user_logout(request):
     logout(request)
-    redirect('login')
+    redirect ('login')
+    return HttpResponse("Successfully Logged Out")
