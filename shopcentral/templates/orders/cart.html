@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Your Cart
+{% endblock %}
+
+{% block heading %}
+    Cart
+{% endblock %}
+
+{% block content %}
+
+    <table>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+        </tr>
+        {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>₹ {{ item.product.price }}</td>
+                <td>₹ {{ item.subtotal }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <p>Grand Total = ₹ {{ total }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" >Checkout</button>
+    </form>
+
+{% endblock %}

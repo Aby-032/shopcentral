@@ -5,8 +5,7 @@ from products.models import Product
 
 # Create your views here.
 
-@login_required
-# Add to Cart
+@login_required # Add to Cart View
 def add_to_cart(request):
     if request.method == "POST":
         product_id = request.POST.get("product_id")
@@ -25,3 +24,17 @@ def add_to_cart(request):
             cart_item.save()
 
     return redirect("product_detail", id=product.id)
+
+@login_required # Cart View
+def cart_view(request):
+    cart = Cart.objects.get(user=request.user)
+
+    cart_items = cart.items.all()
+
+    total = sum(item.subtotal for item in cart_items)
+
+    return render(request, 'orders/cart.html', {
+        "cart": cart,
+        "cart_items": cart_items,
+        "total": total
+    })

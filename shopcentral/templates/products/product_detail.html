@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Product Detail
+{% endblock %}
+
+{% block heading %}
+    {{ product.name }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="product_card">
+        
+        {% if product.image %}
+            <img src="{{ product.image.url }}">
+        {% else %}
+            <p>Image not available.</p>
+        {% endif %}
+        <p>Name: {{ product.name }}</p>
+        <p>Description: {{ product.description }}</p>
+        <p>Category: {{ product.category }}</p>
+        <p>In Stock: {{ product.stock }}</p>
+        <p>Price: ₹{{ product.price }}</p>
+
+        <form method="POST" action="{% url 'add_to_cart' %}">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <button type="submit">Add to Cart</button>
+        </form>
+
+    </div>
+
+{% endblock %}
