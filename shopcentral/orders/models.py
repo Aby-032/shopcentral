@@ -72,5 +72,9 @@ class OrderItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def subtotal(self):
+        return self.product.price * self.quantity
+
     def __str__(self):
         return f"{self.product.name} ({self.quantity})"

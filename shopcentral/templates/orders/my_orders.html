@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    My Orders
+{% endblock %}
+
+{% block heading %}
+    My Orders
+{% endblock %}
+
+{% block content %}
+
+    {% for message in messages %}
+
+        <p>{{ message }}</p>
+
+    {% endfor %}
+
+    {% if orders %}
+
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Created At</th>
+            </tr>
+
+            {% for order in orders %}
+                <tr>
+                    <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }}</a> </td>
+                    <td>₹ {{ order.total_price }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.created_at|date:"M d, Y" }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    {% else %}
+
+        <p>You haven't placed any orders yet....</p>
+
+    {% endif%}
+
+{% endblock %}

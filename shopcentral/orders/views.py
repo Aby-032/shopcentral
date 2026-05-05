@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import Cart, CartItem, Order, OrderItem
 from products.models import Product
 
@@ -23,7 +24,7 @@ def add_to_cart(request):
             cart_item.quantity += 1
             cart_item.save()
 
-    return redirect("product_detail", id=product.id)
+    return redirect("products")
 
 @login_required # Cart View
 def cart_view(request):
@@ -65,6 +66,22 @@ def checkout(request):
 
         cart_items.delete()
 
-        return redirect('cart')
+        messages.success(request, "Order placed successfully!")
     
-    return redirect('cart')
+    return redirect('my_orders')
+
+@login_required # Orders / Order Summary
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    
+    return render(request, 'orders/my_orders.html', {'orders': orders})
+
+@login_required # Order Detail
+def order_detail(request, id):
+    order = get_object_or_404(Order, id=id, user=request.user)
+    order_items = order.items.all()
+
+    return render(request, 'orders/order_detail.html', {
+        "order": order,
+        "order_items": order_items
+    })
